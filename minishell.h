@@ -73,11 +73,24 @@ bool  is_reder(int type);
 int   set_fd(t_exec *s, int reder_type, char *file);
 char  **get_char_env(char **envv, int set);
 int   pipe_count(t_exec *h);
-
+bool    isBuilt(char *cmd);
+int exit_status(int _sts, int set);
 // signals 
 int set_signals(void);
 void	sig_hand(int sig);
 void	child_sig(int sig);
+int     ft_putstr_fd(char *s, int fd);
+void	ft_putnbr_fd(int n, int fd);
+
+// builtins
+int builtin_nf(t_exec *node);
+int echo(t_exec *node, int fd);
+int My_exit(t_exec *node);
+char    *get_till_char(char *str, char c);
+void    *_env_(char **env, char *key, char *value, t_call call);
+void prnt_env(int fd);
+int disp_exprt(int fd);
+t_env   *add_env(t_env **head, char *key, char *value, t_call call);
 
 //------------ hamza------
 int check_syntax(char *input, t_parser *parser);

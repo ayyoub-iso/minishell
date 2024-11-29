@@ -59,6 +59,7 @@ struct s_env
 {
     char *key;
     char *value;
+    bool hidden;
     struct s_env *next;
 };
 
@@ -102,3 +103,16 @@ typedef struct s_expand
     char tmp;
     
 } t_expand;
+
+typedef enum    s_call
+{
+    INIT,
+    NEW,
+    ADD,
+    CHANGE,
+    SEARCH,
+    REMOVE,
+    PRINT_XPRT,
+    GET_STRCT,
+    GET_CHAR
+}   t_call;

@@ -10,9 +10,9 @@
 #                                                                              #
 # **************************************************************************** #
 
-SRC		=	build.c env.c execution/exec.c execution/handle_reder.c execution/list.c execution/utils.c \
-			execution_utils.c fill_execution.c ft_split.c herdoc.c lexer.c main.c utils.c utils2.c utils3.c \
-			execution/signals.c checksyntax.c
+SRC		=	build.c builtins/builtins.c builtins/echo.c builtins/exit.c env/env.c execution/exec.c \
+			execution/handle_reder.c execution/list.c execution/signals.c execution/utils.c execution_utils.c fill_execution.c \
+			ft_expand.c ft_split.c herdoc.c main.c utils.c utils2.c utils3.c utils4.c execution/exit_status.c
 NAME	=	minishell
 CC		=	cc
 HEADER	=	minishell.h struct.h
