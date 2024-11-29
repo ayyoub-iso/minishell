@@ -6,12 +6,12 @@
 /*   By: akharfat <akharfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 15:52:33 by akharfat          #+#    #+#             */
-/*   Updated: 2024/11/24 20:18:11 by akharfat         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:20:07 by akharfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+void	ft_lstaddback(t_parser **alst, t_parser *new);
 // static int is_operator(char c)
 // {
 //     return (c == '|' || c == '>' || c == '<' || c == ' ' || c == '\t' || c == '\'' || c == '"');
@@ -311,6 +311,7 @@ static t_parser *handle_quotes(char *input, int *i)
         return (NULL);
 
     // Create node with proper quote status
+    //delete_quotes_in_token(&token);
     node = parser(token, status, COMMAND);
     free(token);
 
@@ -320,6 +321,20 @@ static t_parser *handle_quotes(char *input, int *i)
     return (node);
 }
 
+// void    delete_quotes(char **str)
+// {
+//     int i ;
+//     char *res;
+
+    
+//     i = 0;
+//     res = 
+//     while (*str[i])
+//     {
+//         // if (str[i] == '\'' || *str[i] == "\"")
+//         // 
+//     }
+// }
 static t_parser *handle_word(char *input, int *i)
 {
     int start;
@@ -337,7 +352,7 @@ static t_parser *handle_word(char *input, int *i)
     token = ft_substr(input, start, len);
     if (!token)
         return (NULL);
-
+    //delete_quotes(&token);
     node = parser(token, GENERAL, COMMAND);
     free(token);
 
@@ -511,138 +526,170 @@ static t_parser *handle_operator(char *input, int *i)
 //     return (0);
 // }
 
-static int validate_token_sequence(t_parser *parser, t_minishell *minishell)
+// static int validate_token_sequence(t_parser *parser, t_minishell *minishell)
+// {
+//     (void)minishell;
+//     t_parser *current = parser;
+//     t_type prev_type = COMMAND;
+
+//     // Handle pipe at the start of input
+//     if (current && current->type == PIPE)
+//     {
+//         printf("minishell: syntax error near unexpected token `|'\n");
+//         return (1);
+//     }
+
+//     // Handle single redirection at start
+//     if (current && (current->type == LESS || current->type == GREATER || 
+//         current->type == LESSLESS || current->type == GREATERGREATER))
+//     {
+//         if (!current->next)
+//         {
+//             printf("minishell: syntax error near unexpected token `newline'\n");
+//             return (1);
+//         }
+//     }
+
+//     while (current)
+//     {
+//         // Handle consecutive pipes
+//         if (current->type == PIPE && prev_type == PIPE)
+//         {
+//             printf("minishell: syntax error near unexpected token `|'\n");
+//             return (1);
+//         }
+
+//         // Handle pipe at the end of input
+//         if (current->type == PIPE && !current->next)
+//         {
+//             printf("minishell: syntax error near unexpected token `|'\n");
+//             return (1);
+//         }
+
+//         // Handle redirection operators
+//         if ((prev_type == LESS || prev_type == GREATER || 
+//              prev_type == LESSLESS || prev_type == GREATERGREATER))
+//         {
+//             if (!current || current->type != COMMAND)
+//             {
+//                 printf("minishell: syntax error near unexpected token `newline'\n");
+//                 return (1);
+//             }
+//         }
+
+//         // Handle redirection at end of input
+//         if ((current->type == LESS || current->type == GREATER || 
+//              current->type == LESSLESS || current->type == GREATERGREATER) 
+//             && !current->next)
+//         {
+//             printf("minishell: syntax error near unexpected token `newline'\n");
+//             return (1);
+//         }
+
+//         // Handle expansion if needed
+//         if (ft_strchr(current->token, '$') && current->stat != INQUOTES)
+//         {
+//             //printf("token[%s]\n",current->token);
+//             current->token = expansion(current->token, minishell);
+//         }
+
+//         prev_type = current->type;
+//         current = current->next;
+//     }
+//     return (0);
+// }
+
+// static void clear_parser_list(t_parser **parser)
+// {
+//     t_parser *current;
+//     t_parser *next;
+
+//     if (!parser || !*parser)
+//         return;
+
+//     current = *parser;
+//     while (current)
+//     {
+//         next = current->next;
+//         free(current->token);
+//         free(current);
+//         current = next;
+//     }
+
+//     *parser = NULL;
+// }
+
+// char *proces_args()
+// {
+    
+// }
+
+t_parser *create_parser_node(void)
 {
-    (void)minishell;
-    t_parser *current = parser;
-    t_type prev_type = COMMAND;
-
-    // Handle pipe at the start of input
-    if (current && current->type == PIPE)
-    {
-        printf("minishell: syntax error near unexpected token `|'\n");
-        return (1);
-    }
-
-    // Handle single redirection at start
-    if (current && (current->type == LESS || current->type == GREATER || 
-        current->type == LESSLESS || current->type == GREATERGREATER))
-    {
-        if (!current->next)
-        {
-            printf("minishell: syntax error near unexpected token `newline'\n");
-            return (1);
-        }
-    }
-
-    while (current)
-    {
-        // Handle consecutive pipes
-        if (current->type == PIPE && prev_type == PIPE)
-        {
-            printf("minishell: syntax error near unexpected token `|'\n");
-            return (1);
-        }
-
-        // Handle pipe at the end of input
-        if (current->type == PIPE && !current->next)
-        {
-            printf("minishell: syntax error near unexpected token `|'\n");
-            return (1);
-        }
-
-        // Handle redirection operators
-        if ((prev_type == LESS || prev_type == GREATER || 
-             prev_type == LESSLESS || prev_type == GREATERGREATER))
-        {
-            if (!current || current->type != COMMAND)
-            {
-                printf("minishell: syntax error near unexpected token `newline'\n");
-                return (1);
-            }
-        }
-
-        // Handle redirection at end of input
-        if ((current->type == LESS || current->type == GREATER || 
-             current->type == LESSLESS || current->type == GREATERGREATER) 
-            && !current->next)
-        {
-            printf("minishell: syntax error near unexpected token `newline'\n");
-            return (1);
-        }
-
-        // Handle expansion if needed
-        if (ft_strchr(current->token, '$') && current->stat != INQUOTES)
-            current->token = expansion(current->token, minishell);
-
-        prev_type = current->type;
-        current = current->next;
-    }
-
-    return (0);
+    // Allocate memory for new parser node
+    t_parser *new_node = (t_parser *)malloc(sizeof(t_parser));
+    
+    // Check if malloc failed
+    if (!new_node)
+        return NULL;
+    
+    // Initialize all members of the structure to default values
+    new_node->token = NULL;        // Token string
+    new_node->type = 0;            // Token type (can be used for word, operator, etc.)
+    new_node->next = NULL;         // Next node pointer
+   // new_node->prev = NULL;         // Previous node pointer
+    
+    return new_node;
 }
+//---------------------mylexer ------------------------
 
-static void clear_parser_list(t_parser **parser)
-{
-    t_parser *current;
-    t_parser *next;
+// int lexer(char *input, t_parser **parser, t_minishell *mini)
+// {
+//     int i;
+//     char *tmp;
+//     t_parser *new_node;
+//     t_execution *cmd;
+//     cmd = NULL;
+//     tmp = NULL;
 
-    if (!parser || !*parser)
-        return;
+//     if (!input || !parser)
+//         return 1;
 
-    current = *parser;
-    while (current)
-    {
-        next = current->next;
-        free(current->token);
-        free(current);
-        current = next;
-    }
+//     *parser = NULL;
+//     i = 0;
 
-    *parser = NULL;
-}
+//     while (input[i])
+//     {
+//         // Skip whitespaces
+//         while (input[i] && is_whitespace(input[i]))
+//             i++;
 
-int lexer(char *input, t_parser **parser, t_minishell *mini)
-{
-    int i;
-    t_parser *new_node;
-    t_execution *cmd;
-    cmd = NULL;
+//         if (!input[i])
+//             break;
 
-    if (!input || !parser)
-        return 1;
+//         if (input[i] == '\'' || input[i] == '"')
+//         {
+//             tmp = new_node->token;
+//             new_node = handle_quotes(input, &i);
+//             new_node->token = ft_strjoin(tmp, new_node->token);
+//         }
+//         else if (is_operator(input[i]))
+//             new_node = handle_operator(input, &i);
+//         else
+//             new_node = handle_word(input, &i);
+//         if (!new_node)
+//             return 1;
+//         printf("cmd = |%s|\n", new_node->token);
+//     }
+//     add_parser(parser, new_node);
+//     // Validate the token sequence
+//     // if (validate_token_sequence(*parser, mini))
+//     // {
+//     //     clear_parser_list(parser);
+//     //     return 1;
+//     // }
+//     (void)mini;
+//     send_to_execution(*parser, &cmd);
+//     return 0;
+// }
 
-    *parser = NULL;
-    i = 0;
-
-    while (input[i])
-    {
-        // Skip whitespaces
-        while (input[i] && is_whitespace(input[i]))
-            i++;
-
-        if (!input[i])
-            break;
-
-        if (input[i] == '\'' || input[i] == '"')
-            new_node = handle_quotes(input, &i);
-        else if (is_operator(input[i]))
-            new_node = handle_operator(input, &i);
-        else
-            new_node = handle_word(input, &i);
-
-        if (!new_node)
-            return 1;
-
-        add_parser(parser, new_node);
-    }
-
-    // Validate the token sequence
-    if (validate_token_sequence(*parser, mini))
-    {
-        clear_parser_list(parser);
-        return 1;
-    }
-    send_to_execution(*parser, &cmd);
-    return 0;
-}

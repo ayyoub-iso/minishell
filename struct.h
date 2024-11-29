@@ -6,7 +6,7 @@
 /*   By: akharfat <akharfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 15:42:22 by akharfat          #+#    #+#             */
-/*   Updated: 2024/11/22 17:54:13 by akharfat         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:42:02 by akharfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,14 @@ typedef enum e_stat t_stat;
 typedef enum e_type t_type;
 typedef struct s_env t_env;
 typedef struct s_execution t_execution;
+
+typedef struct s_use
+{
+	int		len;
+	int		start;
+	int		end;
+	char	*str;
+}	t_use;
 
 enum e_stat
 {
@@ -40,7 +48,8 @@ enum    e_type
 
 struct s_parser
 {
-    char *token;
+    char *token;// for expansion;
+    char *arg; 
     t_type type;
     t_stat stat;
     struct s_parser *next;
@@ -56,10 +65,12 @@ struct s_env
 struct s_minishell
 {
     t_parser *parser;
-    char **env;
+    char     **env;
     char *line;
     int ret_value;
     int count;
+    int exit_status;
+    int p_count;
     t_env   *envriment;
 };
 
@@ -71,3 +82,23 @@ struct s_execution
     int cmd_len;
     t_execution *next;
 };
+
+typedef struct s_exec
+{
+    char    *cmd;
+    char    **opt;
+    int     fd_out;
+    int     fd_in;
+    bool    run_it;
+    struct s_exec   *next;
+}   t_exec;
+
+typedef struct s_expand
+{
+    int start;
+    int end;
+    char *key;
+    char *value;
+    char tmp;
+    
+} t_expand;

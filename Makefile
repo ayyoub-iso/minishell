@@ -6,24 +6,29 @@
 #    By: akharfat <akharfat@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/13 11:22:50 by akharfat          #+#    #+#              #
-#    Updated: 2024/11/15 11:50:14 by akharfat         ###   ########.fr        #
+#    Updated: 2024/11/27 12:44:59 by akharfat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRC		=	$(shell find . -name "*.c")
+SRC		=	build.c env.c execution/exec.c execution/handle_reder.c execution/list.c execution/utils.c \
+			execution_utils.c fill_execution.c ft_split.c herdoc.c lexer.c main.c utils.c utils2.c utils3.c \
+			execution/signals.c checksyntax.c
 NAME	=	minishell
 CC		=	cc
 HEADER	=	minishell.h struct.h
 CFLAGS	=	-Wall -Wextra -Werror
 OBJS	=	$(SRC:.c=.o)
 
+READLINE_L = ~/.brew/opt/readline/lib
+READLINE_I = ~/.brew/opt/readline/include
+
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) -lreadline
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) -L $(READLINE_L) -lreadline
 
 %.o: %.c $(HEADER)
-	$(CC) $(CFLAGS) -c $<
+	$(CC) $(CFLAGS) -c -I $(READLINE_I) $< -o $@
 
 clean:
 	$(RM) $(OBJS)

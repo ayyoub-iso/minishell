@@ -6,7 +6,7 @@
 /*   By: akharfat <akharfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 15:48:02 by akharfat          #+#    #+#             */
-/*   Updated: 2024/11/22 17:37:38 by akharfat         ###   ########.fr       */
+/*   Updated: 2024/11/27 12:42:15 by akharfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,17 @@
 #include <readline/history.h>
 #include <unistd.h>
 #include "struct.h"
+
+// typedef struct s_expand
+// {
+//     int start;
+//     int end;
+//     char *key;
+//     char *value;
+//     char tmp;
+    
+// } t_expand;
+
 
 void add_parser(t_parser **parser, t_parser *new);
 t_parser *parser(char *line, t_stat stat, t_type type);
@@ -54,3 +65,19 @@ t_env	*new_env(char *key, char *value);
 void	append_env(t_env **env, t_env *node);
 char	**ft_split(const char *str, char spliter);
 void	send_to_execution(t_parser *token, t_execution **cmd);
+
+// exucution
+int	exec(t_minishell *msh);
+t_exec   *setup_exec_list(t_parser *s, t_minishell *msh);
+bool  is_reder(int type);
+int   set_fd(t_exec *s, int reder_type, char *file);
+char  **get_char_env(char **envv, int set);
+int   pipe_count(t_exec *h);
+
+// signals 
+int set_signals(void);
+void	sig_hand(int sig);
+void	child_sig(int sig);
+
+//------------ hamza------
+int check_syntax(char *input, t_parser *parser);
